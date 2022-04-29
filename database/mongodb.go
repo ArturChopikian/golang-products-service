@@ -2,16 +2,17 @@ package database
 
 import (
 	"context"
+	"github.com/ArturChopikian/grpc-server/configs"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
 )
 
-func NewMongoDBCollection() (*mongo.Collection, error) {
+func NewMongoDBCollection(cfg *configs.Config) (*mongo.Collection, error) {
 	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
 
 	clientOptions := options.Client().
-		ApplyURI("mongodb+srv://arturchopikian:cCgBuL7CWzz5htdQ@cluster0.7b913.mongodb.net/test?retryWrites=true&w=majority").
+		ApplyURI(cfg.MongoDB.URI).
 		SetServerAPIOptions(serverAPIOptions).
 		SetMaxPoolSize(1024)
 

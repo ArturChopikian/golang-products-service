@@ -24,6 +24,7 @@ type SeverCSVConfig struct {
 type MongoDBConfig struct {
 	User     string `envconfig:"user"`
 	Password string `envconfig:"password"`
+	URI      string `envconfig:"uri"`
 }
 
 type LogConfig struct {

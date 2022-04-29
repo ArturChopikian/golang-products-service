@@ -41,7 +41,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	coll, err := database.NewMongoDBCollection()
+	coll, err := database.NewMongoDBCollection(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
