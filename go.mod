@@ -3,7 +3,7 @@ module github.com/ArturChopikian/grpc-server
 go 1.17
 
 require (
-	github.com/ArturChopikian/csv_http_server v0.0.0-20220429113336-798ef81e7289
+	github.com/ArturChopikian/csv_http_server v0.0.0-20220429165524-68189fc9aac3
 	github.com/golang/protobuf v1.5.2
 	github.com/joho/godotenv v1.4.0
 	github.com/kelseyhightower/envconfig v1.4.0
