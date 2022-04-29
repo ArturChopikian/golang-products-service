@@ -1,0 +1,62 @@
+syntax="proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option go_package="/pb";
+
+package products;
+
+// ProductsService provides some rpc calls for creating, updating and getting products
+service ProductsService {
+  // Fetch - request external CSV-file with list of products by external url.
+  // CSV-file have view NAME,PRICE.
+  // Last price of each product save in the database.
+  // Also saves count of changing of product's price and time of last changing price.
+  rpc Fetch(FetchRequest) returns (FetchResponse) {};
+
+  // List - get page by page list of products with their prices, count of changing price and time of last update price.
+  // Provided all options for sorting for implementing it is like infinite scroll.
+  rpc List(ListRequest) returns (ListResponse) {};
+}
+
+// Product message contains all field which need for save in database
+message Product {
+  string id = 1;
+  string name = 2;
+  double price = 3;
+  google.protobuf.Timestamp updated = 4;
+  uint32 price_updates = 5;
+}
+
+// The request message for fetching products
+message FetchRequest {
+  // external url where saved CSV-file
+  string url = 1;
+}
+
+// The response message for fetching products
+message FetchResponse {
+  // message which describe result
+  string message = 1;
+}
+
+// The request message for getting list of products
+message ListRequest {
+//  string order_by = 1;
+  // Provide sorting which can present like map<string, int> where:
+  // <string> it is name of field (name, price, ect.)
+  // <int> it is determines ascending(1)/descending(-1) sort
+  map<string, int32> order_by = 1;
+  // page_size represent limit of number products which returns
+  int32 page_size = 3;
+  // page_number represent number of current page
+  int32 page_number = 4;
+}
+
+// The response message for getting list of products
+message ListResponse {
+  // Contain list of products
+  repeated Product products = 1;
+  // Send number of next page
+  int32 next_page_number = 2;
+}
