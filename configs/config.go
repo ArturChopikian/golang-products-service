@@ -16,12 +16,13 @@ type ServerConfig struct {
 }
 
 type SeverCSVConfig struct {
-	Host string `envconfig:"host"`
-	Port string `envconfig:"port"`
+	Host   string `envconfig:"host"`
+	Port   string `envconfig:"port"`
+	Folder string `envconfig:"folder"`
 }
 
 type MongoDBConfig struct {
-	Name     string `envconfig:"name"`
+	User     string `envconfig:"user"`
 	Password string `envconfig:"password"`
 }
 
