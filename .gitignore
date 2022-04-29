@@ -21,3 +21,5 @@ vendor/
 *.env
 
 *.idea
+
+csv_files/
