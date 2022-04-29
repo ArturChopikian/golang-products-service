@@ -4,7 +4,7 @@ import (
 	"fmt"
 	csv_server "github.com/ArturChopikian/csv_http_server"
 	"github.com/ArturChopikian/grpc-server/configs"
-	"github.com/ArturChopikian/grpc-server/internal/database"
+	"github.com/ArturChopikian/grpc-server/database"
 	"github.com/ArturChopikian/grpc-server/internal/server"
 	"github.com/joho/godotenv"
 	"io"
