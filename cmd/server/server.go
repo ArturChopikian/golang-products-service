@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
+	csv_server "github.com/ArturChopikian/csv_http_server"
 	"github.com/ArturChopikian/grpc-server/configs"
 	"github.com/ArturChopikian/grpc-server/internal/database"
 	"github.com/ArturChopikian/grpc-server/internal/server"
+	"github.com/joho/godotenv"
 	"io"
 	"log"
 	"os"
@@ -11,6 +14,10 @@ import (
 
 func init() {
 	log.SetPrefix("Server: ")
+
+	if err := godotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func main() {
@@ -38,6 +45,25 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	folder := cfg.SeverCSV.Folder
+	address := fmt.Sprintf("%s:%s", cfg.SeverCSV.Host, cfg.SeverCSV.Port)
+
+	csvLog := log.New(wrt, "CSV SERVER: ", log.Ldate|log.Ltime)
+	csvServer, err := csv_server.NewCSVServer(folder, address)
+	if err != nil {
+		csvLog.Fatal(err)
+	}
+
+	// map csv handlers and run csv server
+	go func() {
+		if err := csvServer.MapHandlers(); err != nil {
+			csvLog.Fatal(err)
+		}
+		if err := csvServer.Run(); err != nil {
+			csvLog.Fatal(err)
+		}
+	}()
 
 	// create new products server
 	s, err := server.NewProductsServer(cfg, coll)
