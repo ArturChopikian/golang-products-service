@@ -19,4 +19,7 @@ For start project need to define the list of env variable:
 >MONGODB_USER="root"<br>
 >MONGODB_PASSWORD="root"<br>
 >MONGODB_URI="url to mongoDB server"<br>
+> MONGODB_DATABASE="db_name"<br>
+>MONGODB_COLLECTION="coll_name"<br>
+>MONGODB_TIMEOUT=10<br>
 >LOG_PREFIX="server"<br>
