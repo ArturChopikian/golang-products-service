@@ -16,7 +16,9 @@ type ProductsHandler struct {
 }
 
 func NewProductsHandler(useCase *usecase.UseCases, cfg *configs.Config) *ProductsHandler {
-	return &ProductsHandler{productsUC: useCase.ProductsUC}
+	return &ProductsHandler{
+		productsUC: useCase.ProductsUC,
+	}
 }
 
 func (s *ProductsHandler) Fetch(ctx context.Context, req *pb2.FetchRequest) (*pb2.FetchResponse, error) {
@@ -27,7 +29,9 @@ func (s *ProductsHandler) Fetch(ctx context.Context, req *pb2.FetchRequest) (*pb
 		return nil, err
 	}
 
-	return &pb2.FetchResponse{Message: "Work"}, nil
+	return &pb2.FetchResponse{
+		Message: "Work",
+	}, nil
 }
 
 func (s *ProductsHandler) List(ctx context.Context, req *pb2.ListRequest) (*pb2.ListResponse, error) {
@@ -38,5 +42,8 @@ func (s *ProductsHandler) List(ctx context.Context, req *pb2.ListRequest) (*pb2.
 		return nil, err
 	}
 
-	return &pb2.ListResponse{Products: models.ProductsToGrpc(products), NextPageNumber: req.GetPageNumber() + 1}, nil
+	return &pb2.ListResponse{
+		Products:       models.ProductsToGrpc(products),
+		NextPageNumber: req.GetPageNumber() + 1,
+	}, nil
 }

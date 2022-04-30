@@ -98,14 +98,8 @@ func (p *productsRepos) List(ctx context.Context, orderBy map[string]int32, page
 			log.Println("repos: List: error while decoding:", err)
 			return nil, err
 		}
-
-		fmt.Println(p)
 		result = append(result, p)
 	}
-
-	fmt.Println("len result:", len(result))
-	fmt.Println("cap result:", cap(result))
-	fmt.Println(result)
 
 	if err := cur.Err(); err != nil {
 		log.Println("repos: List: error while get Err from cursor:", err)
