@@ -34,15 +34,15 @@ func (uc *productUC) List(ctx context.Context, orderBy map[string]int32, pageSiz
 // Fetch - take URL with external csv file
 // we have the pipeline
 //
-//			->	check	->
+//			->check->
 //
-//			->	check	->
-//				           		-> update
-// start -> ->	check	-> ->
-//								-> create
-//			->	check	->
+//			->check->
+//						-> update
+// start->	->check-> ->
+//						-> create
+//			->check->
 //
-//			->	check	->
+//			->check->
 //
 // start stage goroutine parse scv file form URL and line by line transmit to the next stage
 //
