@@ -22,9 +22,12 @@ type SeverCSVConfig struct {
 }
 
 type MongoDBConfig struct {
-	User     string `envconfig:"user"`
-	Password string `envconfig:"password"`
-	URI      string `envconfig:"uri"`
+	User       string `envconfig:"user"`
+	Password   string `envconfig:"password"`
+	URI        string `envconfig:"uri"`
+	Database   string `envconfig:"database"`
+	Collection string `envconfig:"collection"`
+	Timeout    int    `envconfig:"timeout"`
 }
 
 type LogConfig struct {

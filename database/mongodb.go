@@ -13,10 +13,11 @@ func NewMongoDBCollection(cfg *configs.Config) (*mongo.Collection, error) {
 
 	clientOptions := options.Client().
 		ApplyURI(cfg.MongoDB.URI).
-		SetServerAPIOptions(serverAPIOptions).
-		SetMaxPoolSize(1024)
+		SetServerAPIOptions(serverAPIOptions)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	// timeout in seconds
+	timeout := time.Duration(cfg.MongoDB.Timeout) * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	client, err := mongo.Connect(ctx, clientOptions)
@@ -24,5 +25,5 @@ func NewMongoDBCollection(cfg *configs.Config) (*mongo.Collection, error) {
 		return nil, err
 	}
 
-	return client.Database("products-service").Collection("products"), nil
+	return client.Database(cfg.MongoDB.Database).Collection(cfg.MongoDB.Collection), nil
 }
