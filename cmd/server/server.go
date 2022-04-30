@@ -15,12 +15,14 @@ import (
 func init() {
 	log.SetPrefix("Server: ")
 
+	// load env file
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func main() {
+	// open file for save logs
 	f, err := os.OpenFile("info.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal(err)
@@ -36,20 +38,25 @@ func main() {
 	wrt := io.MultiWriter(os.Stdout, f)
 	log.SetOutput(wrt)
 
+	// create new config from .env file
 	cfg, err := configs.NewConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// get mongoDB collection
 	coll, err := database.NewMongoDBCollection(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// define two variables for CSV Server
 	folder := cfg.SeverCSV.Folder
 	address := fmt.Sprintf("%s:%s", cfg.SeverCSV.Host, cfg.SeverCSV.Port)
 
+	// create logs for CSV Server
 	csvLog := log.New(wrt, "CSV SERVER: ", log.Ldate|log.Ltime)
+	// create CSV Server
 	csvServer, err := csv_server.NewCSVServer(folder, address)
 	if err != nil {
 		csvLog.Fatal(err)
@@ -71,6 +78,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// map handlers for product server
 	s.MapHandler()
 
 	// run server
