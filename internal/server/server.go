@@ -15,7 +15,7 @@ import (
 )
 
 type ProductServers struct {
-	handler   *grpc_handler.ProductsHandler
+	handler   grpc_handler.ProductsHandlerInterface
 	cfg       *configs.Config
 	mongoColl *mongo.Collection
 	server    *grpc.Server

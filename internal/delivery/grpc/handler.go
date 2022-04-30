@@ -9,19 +9,24 @@ import (
 	"log"
 )
 
-type ProductsHandler struct {
+type ProductsHandlerInterface interface {
+	Fetch(ctx context.Context, req *pb2.FetchRequest) (*pb2.FetchResponse, error)
+	List(ctx context.Context, req *pb2.ListRequest) (*pb2.ListResponse, error)
+}
+
+type productsHandler struct {
 	productsUC usecase.ProductsUCInterface
 	cfg        *configs.Config
 	pb2.UnimplementedProductsServiceServer
 }
 
-func NewProductsHandler(useCase *usecase.UseCases, cfg *configs.Config) *ProductsHandler {
-	return &ProductsHandler{
+func NewProductsHandler(useCase *usecase.UseCases, cfg *configs.Config) *productsHandler {
+	return &productsHandler{
 		productsUC: useCase.ProductsUC,
 	}
 }
 
-func (s *ProductsHandler) Fetch(ctx context.Context, req *pb2.FetchRequest) (*pb2.FetchResponse, error) {
+func (s *productsHandler) Fetch(ctx context.Context, req *pb2.FetchRequest) (*pb2.FetchResponse, error) {
 
 	err := s.productsUC.Fetch(ctx, req.GetUrl())
 	if err != nil {
@@ -34,7 +39,7 @@ func (s *ProductsHandler) Fetch(ctx context.Context, req *pb2.FetchRequest) (*pb
 	}, nil
 }
 
-func (s *ProductsHandler) List(ctx context.Context, req *pb2.ListRequest) (*pb2.ListResponse, error) {
+func (s *productsHandler) List(ctx context.Context, req *pb2.ListRequest) (*pb2.ListResponse, error) {
 
 	products, err := s.productsUC.List(ctx, req.GetOrderBy(), req.GetPageSize(), req.GetPageNumber())
 	if err != nil {
