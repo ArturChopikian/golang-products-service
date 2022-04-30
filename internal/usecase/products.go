@@ -18,15 +18,41 @@ import (
 	"time"
 )
 
+// productUC - define business logic for products handlers
 type productUC struct {
 	productsRepos repository.ProductsReposInterface
 }
 
+// List - take orderBy, pageSize, pageNumber
+// and call List method from repository
+// return list of product's pointers or error
 func (uc *productUC) List(ctx context.Context, orderBy map[string]int32, pageSize int32, pageNumber int32) ([]*models.Product, error) {
 
 	return uc.productsRepos.List(ctx, orderBy, pageSize, pageNumber)
 }
 
+// Fetch - take URL with external csv file
+// we have the pipeline
+//
+//			->	check	->
+//
+//			->	check	->
+//				           		-> update
+// start -> ->	check	-> ->
+//								-> create
+//			->	check	->
+//
+//			->	check	->
+//
+// start stage goroutine parse scv file form URL and line by line transmit to the next stage
+//
+// check stage it is 5 goroutine which get data from start and check product
+// if this product exists (in mongoDb collection) and price changed - transmit to the next stage (update)
+// if this product not exist (in mongoDb collection) - transmit to the next stage (create)
+//
+// create stage get data and insert new product into collection
+//
+// update stage get data and update product price, updated time and counted of updated price
 func (uc *productUC) Fetch(ctx context.Context, url string) error {
 
 	ctx, cancel := context.WithCancel(ctx)
@@ -231,10 +257,14 @@ func (uc *productUC) Fetch(ctx context.Context, url string) error {
 //	return nil
 //}
 
+// newProductUC - return pointer of productUC
 func newProductUC(repos repository.ProductsReposInterface) *productUC {
 	return &productUC{productsRepos: repos}
 }
 
+// createProduct - take name and price
+// define all fields for models.Product
+// return - pointer for this product
 func createProduct(name string, price float64) *models.Product {
 	return &models.Product{
 		Id:           primitive.NewObjectID(),
